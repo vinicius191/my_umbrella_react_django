@@ -1,4 +1,4 @@
-# my_umbrella_react_django
+# My Umbrella - Using React and Django
 Simple project to show weather conditions for a specific location.
 
 ## Installing steps:
