@@ -1,0 +1,2 @@
+export const GET_WEATHER = 'GET_WEATHER';
+export const WEATHER_LOADING = 'WEATHER_LOADING';
