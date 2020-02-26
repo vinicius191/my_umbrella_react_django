@@ -1,5 +1,6 @@
+
 body {
-    font-family: "Roboto", "Open Sans", sans-serif;
+    font-family: 'Open Sans', sans-serif; 
     font-size: 14px;
     font-weight: 300;
     line-height: 1.5;
@@ -7,8 +8,10 @@ body {
     color: #FFFFFF;
 }
 
+/* Forecast Display */
+
 .forecast-main-container {
-    margin-top: 150px;
+    margin-top: -210px;
 }
 
 .forecast-container {
@@ -25,6 +28,7 @@ body {
     height: 40px;
     display: block;
     text-align: center;
+    font-family: 'Roboto', sans-serif !important; 
 }
 
 .forecast-footer {
@@ -70,3 +74,211 @@ small {
 .wi {
     color: #009ad8;
 }
+
+.hero {
+    background-size: cover;
+    padding: 70px 0;
+    min-height: 350px; 
+}
+
+.find-location {
+    position: relative;
+    margin-bottom: 70px; 
+}
+
+.find-location input[type="text"] {
+    width: 100%;
+    padding: 20px 50px 20px 20px;
+    background: #1e202b;
+    color: white; 
+}
+
+.find-location input[type="submit"] {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+    padding: 0 40px; 
+}
+
+form input, form textarea, form select {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 0px; 
+}
+form select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}
+
+form textarea {
+    resize: vertical; 
+}
+
+.button, form input[type="submit"], form button, form input[type="reset"] {
+    border: none;
+    background: #009ad8;
+    padding: 10px 20px;
+    border-radius: 0px;
+    color: white; 
+}
+
+/* Loading Spinner Icons */
+.lg-spinner {
+    width: 3rem; 
+    height: 3rem;
+    margin: 30px;
+}
+
+.sm-spinner {
+    width: 1rem; 
+    height: 1rem;
+}
+
+/*
+ * Header Styles
+ */
+ .site-header {
+    padding: 20px 0; 
+}
+
+.site-header .branding {
+    float: left; 
+}
+
+.site-header .branding .logo, .site-header .branding .logo-type {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.logo-type > h1 {
+    margin-top: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+}
+
+.site-header .branding .logo {
+    margin-right: 10px; 
+}
+
+.site-header .branding .site-title {
+    margin-bottom: 5px;
+    font-size: 24px;
+    color: white; 
+}
+
+.site-header .branding .site-description {
+    font-size: 12px;
+    display: block;
+    color: #bfc1c8; 
+    font-weight: 300;
+}
+  
+.main-navigation {
+    float: right; 
+}
+
+.main-navigation > ul, ol {
+    margin-top: 18px;
+    margin-bottom: 0px;
+}
+
+.main-navigation .menu-toggle, .main-navigation .menu {
+    vertical-align: middle; 
+}
+
+.main-navigation .menu-toggle {
+      background: none;
+      border: 2px solid transparent;
+      color: white;
+      padding: 20px;
+      border-radius: 0px;
+      -webkit-transition: .3s ease;
+              transition: .3s ease;
+      display: none;
+      outline: none; 
+}
+@media screen and (max-width: 990px) {
+    .main-navigation .menu-toggle {
+        display: inline-block; 
+    } 
+}
+
+.main-navigation .menu-toggle:hover, .main-navigation .menu-toggle:active {
+    border-color: #009ad8;
+    color: #009ad8; 
+}
+
+.main-navigation .menu {
+    list-style: none;
+    display: inline-block;
+    *zoom: 1; 
+}
+
+.main-navigation .menu:after {
+    content: " ";
+    clear: both;
+    display: block;
+    overflow: hidden;
+    height: 0; 
+}
+@media screen and (max-width: 990px) {
+    .main-navigation .menu {
+        display: none; 
+    } 
+}
+.main-navigation .menu .menu-item {
+    float: left;
+    margin-left: 10px; 
+}
+.main-navigation .menu .menu-item a {
+    padding: 5px 25px;
+    border: 2px solid transparent;
+    border-radius: 0px;
+    color: white;
+    -webkit-transition: .3s ease;
+            transition: .3s ease;
+    font-weight: 400; 
+}
+
+.main-navigation .menu .menu-item.current-menu-item a, .main-navigation .menu .menu-item:hover a {
+    border-color: #009ad8;
+    color: #009ad8; 
+}
+  
+.mobile-navigation {
+    padding: 30px 0 0;
+    clear: both;
+    display: none; 
+}
+
+@media screen and (min-width: 991px) {
+    .mobile-navigation {
+        display: none !important; 
+    } 
+}
+
+.mobile-navigation .menu {
+    background: #262936;
+    list-style: none;
+    text-align: center;
+    border-radius: 0px;
+    overflow: hidden; 
+}
+.mobile-navigation .menu a {
+    padding: 20px;
+    display: block;
+    color: white; 
+}
+.mobile-navigation .menu .menu-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+}
+.mobile-navigation .menu .menu-item:last-child {
+    border-bottom: none; 
+}
+.mobile-navigation .menu .menu-item.current-menu-item a {
+    color: #009ad8; 
+}
+  

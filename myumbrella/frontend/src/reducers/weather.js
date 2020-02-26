@@ -1,4 +1,4 @@
-import { GET_WEATHER, WEATHER_LOADING } from '../actions/types.js';
+import { GET_WEATHER, WEATHER_LOADING, WEATHER_ERROR } from '../actions/types.js';
 
 const initialState = {
     weather: [],
@@ -19,6 +19,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 weather: action.payload,
+                isLoading: false
+            };
+        case WEATHER_ERROR:
+            return {
+                ...state,
+                error: action.payload,
                 isLoading: false
             };
         default:
