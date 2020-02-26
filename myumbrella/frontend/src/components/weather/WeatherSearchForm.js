@@ -41,6 +41,7 @@ export class WeatherSearchForm extends Component {
     render() {
         const { city_name, error } = this.state;
         return (
+
             <div className="hero" style={{backgroundImage: "url(../../../static/images/city-bg.jpg)"}}>
                 <div className="container">
                     <div className="row no-gutters">
@@ -59,14 +60,15 @@ export class WeatherSearchForm extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
         isLoading: state.weather.isLoading,
-        error: state.weather.error
+        error: state.weather.error,
+        city_name: state.city_name
     }
 }
 

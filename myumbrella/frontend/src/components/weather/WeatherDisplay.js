@@ -12,7 +12,6 @@ export class WeatherDisplay extends Component {
 
     componentDidMount() {
         this.props.getWeather('Sydney');
-        console.log('-----', this)
     }
     
     render() {
@@ -36,8 +35,22 @@ export class WeatherDisplay extends Component {
             const day3 = this.props.weather.list[3];
             const day4 = this.props.weather.list[4];
 
+            console.log(this.state, this.props)
+
             return (
                 <div className="container forecast-main-container">
+                    
+                    <div style={{marginBottom: '20px'}}>
+                        <div className="row no-gutters">
+                            <div className="col-sm-12 col-md-12 col-12">
+                                <button type="button" className="btn btn-outline-primary" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}}>
+                                    <i className="fa fa-star-o" style={{marginRight: '10px'}}></i>
+                                    {this.props.weather.city.name}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="row no-gutters">
                         <div className="col-sm-12 col-md-4 forecast-container">
                             <div className="forecast-header">

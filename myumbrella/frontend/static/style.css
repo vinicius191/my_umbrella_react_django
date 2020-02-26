@@ -11,7 +11,7 @@ body {
 /* Forecast Display */
 
 .forecast-main-container {
-    margin-top: -210px;
+    margin-top: -230px;
 }
 
 .forecast-container {
@@ -77,7 +77,7 @@ small {
 
 .hero {
     background-size: cover;
-    padding: 70px 0;
+    padding: 40px 0;
     min-height: 350px; 
 }
 
