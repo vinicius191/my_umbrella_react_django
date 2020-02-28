@@ -2,20 +2,18 @@ import { GET_WEATHER, WEATHER_LOADING, WEATHER_ERROR } from '../actions/types.js
 
 const initialState = {
     weather: [],
-    isLoading: true
+    isLoading: true,
+    error: null
 }
 
 export default function(state = initialState, action) {
-    console.log('Here...')
     switch (action.type) {
         case WEATHER_LOADING:
-            console.log('Reducer, loading...', action)
             return {
                 ...state,
                 isLoading: true
             };
         case GET_WEATHER:
-            console.log('Reducer - Payload: ', action.payload)
             return {
                 ...state,
                 weather: action.payload,
@@ -24,8 +22,8 @@ export default function(state = initialState, action) {
         case WEATHER_ERROR:
             return {
                 ...state,
-                error: action.payload,
-                isLoading: false
+                isLoading: false,
+                error: action.payload
             };
         default:
             return state;

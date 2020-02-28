@@ -35,8 +35,6 @@ export class WeatherDisplay extends Component {
             const day3 = this.props.weather.list[3];
             const day4 = this.props.weather.list[4];
 
-            console.log(this.state, this.props)
-
             return (
                 <div className="container forecast-main-container">
                     
@@ -212,7 +210,8 @@ export class WeatherDisplay extends Component {
 const mapStateToProps = (state) => {
     return {
         weather: state.weather.weather,
-        isLoading: state.weather.isLoading
+        isLoading: state.weather.isLoading,
+        error: state.weather.error
     }
 }
 

@@ -4,13 +4,6 @@ import PropTypes from 'prop-types';
 import { getWeather } from '../../actions/weather';
 
 export class WeatherSearchForm extends Component {
-
-    constructor(props) {
-        super(props);
-
-        console.log(props, this)
-    }
-
     state = {
         city_name: '',
         error: ''
@@ -21,7 +14,6 @@ export class WeatherSearchForm extends Component {
     };
 
     componentDidMount() {
-        console.log('Props from componentDidMount: ', this.props)
     }
 
     onChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -30,7 +22,6 @@ export class WeatherSearchForm extends Component {
         e.preventDefault();
         const { city_name } = this.state;
         const { error } = this.props;
-        console.log('Props: ', this.props);
         this.props.getWeather(city_name);
         this.setState({
             city_name: '',
@@ -65,9 +56,10 @@ export class WeatherSearchForm extends Component {
 }
 
 const mapStateToProps = (state) => {
+    const w = state.weather;
     return {
-        isLoading: state.weather.isLoading,
-        error: state.weather.error,
+        isLoading: w.isLoading,
+        error: w.error,
         city_name: state.city_name
     }
 }
