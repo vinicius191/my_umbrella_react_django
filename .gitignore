@@ -139,3 +139,6 @@ dmypy.json
 # Makefile [start/stop] lock files
 react.pid
 django.pid
+
+# Static file
+myumbrella/frontend/static/frontend/main.js
