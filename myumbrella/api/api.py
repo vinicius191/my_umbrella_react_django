@@ -20,7 +20,9 @@ class GetWeather(generics.GenericAPIView):
         weather_unit = os.environ.get('WEATHER_UNIT')
         weather_url = os.environ.get('WEATHER_URL')
 
-        url = weather_url + self.kwargs['q'] + '&cnt=' + weather_cnt + '&unit=' + weather_unit + '&appid=' + weather_apikey
+        url = weather_url + self.kwargs['q'] + '&cnt=' + weather_cnt + '&units=' + weather_unit + '&appid=' + weather_apikey
+
+        logger.info(url)
         
         try:
             r = requests.get(url)

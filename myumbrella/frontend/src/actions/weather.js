@@ -6,9 +6,18 @@ export const getWeather = (_city_name) => async dispatch => {
         type: WEATHER_LOADING
     });
     try {
+
+        axios.interceptors.request.use((config) => {
+            if (config.addTrailingSlash && config.url[config.url.length-1] !== '/') {
+                config.url += '/';
+            }
+            return config;
+        });
+
        await axios
-        .get(`/api/weather/${_city_name}`)
+        .get(`/api/weather/${_city_name}/`)
         .then(res => {
+            console.log(res)
             dispatch({
                 type: GET_WEATHER,
                 payload: res.data
@@ -29,4 +38,5 @@ export const getWeather = (_city_name) => async dispatch => {
             payload: e||'Error'
         })
     }
+    
 }
