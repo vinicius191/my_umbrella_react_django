@@ -3,9 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getWeather } from '../../actions/weather';
 import { Loading } from '../utils/Loading';
-import { WeatherSearchForm } from './WeatherSearchForm';
+import { Icon } from '../utils/Icon';
+import { UmbrellaMessage } from '../utils/UmbrellaMessage';
+import * as wFunc from '../utils/weatherFunction';
 
 export class WeatherDisplay extends Component {
+    state = {
+        fav_star: "fa fa-star-o"
+    }
+
     static propTypes = {
         getWeather: PropTypes.func.isRequired
     };
@@ -13,20 +19,25 @@ export class WeatherDisplay extends Component {
     componentDidMount() {
         this.props.getWeather('Sydney');
     }
+
+    activeFav = (e) => {
+        e.preventDefault();
+        if(this.state.fav_star == "fa fa-star-o") {
+            console.log('City is not on Favorite list... Adding up');
+            this.setState({
+                fav_star: "fa fa-star"
+            });
+        } else {
+            console.log('City is on Favorite list... Removing up');
+            this.setState({
+                fav_star: "fa fa-star-o"
+            });
+        }
+        
+    }
     
     render() {
         
-        const showTemp = (temp, temp_min) => {
-            if(temp_min === null) {
-                return Math.floor(temp);
-            }
-    
-            if(temp === temp_min || Math.floor(temp) === Math.floor(temp_min)) {
-                return Math.floor(temp_min) - (Math.floor(Math.random() * 7) + 1);
-            }
-    
-        }
-
         if(this.props.isLoading === false) {
 
             const today = this.props.weather.list[0];
@@ -35,104 +46,129 @@ export class WeatherDisplay extends Component {
             const day3 = this.props.weather.list[3];
             const day4 = this.props.weather.list[4];
 
+            const desc = new wFunc.Capitalize(today.weather[0].description);
+
             return (
                 <div className="container forecast-main-container">
                     
                     <div style={{marginBottom: '20px'}}>
                         <div className="row no-gutters">
                             <div className="col-sm-12 col-md-12 col-12">
-                                <button type="button" className="btn btn-outline-primary" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}}>
-                                    <i className="fa fa-star-o" style={{marginRight: '10px'}}></i>
-                                    {this.props.weather.city.name}
+                                <button type="button" className="btn btn-primary-outline" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}} onClick={this.activeFav}>
+                                    <i className={this.state.fav_star} style={{marginRight: '10px'}}></i>
+                                    {this.props.weather.city.name}, {this.props.weather.city.country}
                                 </button>
                             </div>
                         </div>
                     </div>
 
                     <div className="row no-gutters">
-                        <div className="col-sm-12 col-md-4 forecast-container">
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-4 forecast-container">
                             <div className="forecast-header">
-                                <span className="float-left">Sunday</span>
-                                <span className="float-right">24 Feb</span>
+                                <span className="float-left">{wFunc.getWeekDay(today.dt)}</span>
+                                <span className="float-right">{wFunc.getFullDate(today.dt)}</span>
                             </div>
                             <div className="row">
-                                <div className="col-1 col-sm-1 col-md-1"></div>
-                                <div className="col-9 col-sm-9 col-md-9">
+                                <div className="col-12 col-sm-12 col-md-12">
                                     <div className="row text-center">
                                         <div className="col-sm-6 col-md-6">
-                                            <div className="wi wi-snow" id="currentIcon"></div>
+                                            <Icon cod={today.weather[0].id} dt={today.dt} id="currentIcon" />
                                         </div>
                                         <div className="col-sm-6 col-md-6">
                                             <h1 className="temp">
-                                                <span id="currentTemperature">{showTemp(today.main.temp, null)}°</span>
+                                                <span id="currentTemperature">{wFunc.showTemp(today.temp.day, null)}°</span>
                                             </h1>
-                                            <h1 className="temp-lower">{showTemp(today.main.temp, today.main.temp_min)}°</h1>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-1 col-sm-1 col-md-1"></div>
                             </div>
                             <div className="row forecast-footer">
                                 <div className="col-sm-12">
+                                    <UmbrellaMessage rain={wFunc.showRain(today.rain)} is_main={true} />
                                     <span id="currentSummary">{today.weather[0].main}</span><br/>
-                                    <span>Wind: </span><span id="currentWind">{today.wind.speed}</span><span> mph(s)</span><br/>
-                                    <span id="hourlySummary">{today.weather[0].description}</span>
+                                    <span id="hourlySummary">{desc.capitalize()}</span><br/>
+                                    <span>Precipitation: </span><span id="currentRain">{wFunc.showRain(today.rain)}</span><span> mm</span><br/>
+                                    <span>Wind: </span><span id="currentWind">{wFunc.showWind(today.speed)}</span><span> mph(s)</span>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-6 col-md-2 forecast-container">
-                            <div className="forecast-header">Monday</div>
+                        <div className="col-6 col-sm-6 col-md-6 col-lg-2 forecast-container">
+                            <div className="forecast-header">{wFunc.getWeekDay(day1.dt)}</div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
-                                    <div className="wi wi-day-sunny" id="forecastIcon"></div>
+                                    <Icon cod={day1.weather[0].id} dt={day1.dt} id="forecastIcon" />
                                     <h1 className="temp-forecast">
-                                        <span>{Math.floor(day1.main.temp)}°</span>
+                                        <span>{Math.floor(day1.temp.day)}°</span>
                                     </h1>
-                                    <h5>
-                                        <span>{Math.floor(day1.main.temp_min)}°</span>
-                                    </h5>
+                                </div>
+                            </div>
+                            <div className="row forecast-footer forecast-footer-m">
+                                <div className="col-sm-12 footer-desc">
+                                    <UmbrellaMessage rain={wFunc.showRain(day1.rain)} is_main={false} />
+                                    <div style={{marginTop: '57px'}}>
+                                        <span id="currentSummary">{day1.weather[0].main}</span><br/>
+                                        <span>Precipitation: </span><span id="currentRain">{wFunc.showRain(day1.rain)}</span><span> mm</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-6 col-md-2 forecast-container">
-                            <div className="forecast-header">Tuesday</div>
+                        <div className="col-6 col-sm-6 col-md-6 col-lg-2 forecast-container">
+                            <div className="forecast-header">{wFunc.getWeekDay(day2.dt)}</div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
-                                    <div className="wi wi-day-sprinkle" id="forecastIcon"></div>
+                                    <Icon cod={day2.weather[0].id} dt={day2.dt} id="forecastIcon" />
                                     <h1 className="temp-forecast">
-                                        <span>{Math.floor(day2.main.temp)}°</span>
+                                        <span>{Math.floor(day2.temp.day)}°</span>
                                     </h1>
-                                    <h5>
-                                        <span>{Math.floor(day2.main.temp_min)}°</span>
-                                    </h5>
+                                </div>
+                            </div>
+                            <div className="row forecast-footer forecast-footer-m">
+                                <div className="col-sm-12 footer-desc">
+                                    <UmbrellaMessage rain={wFunc.showRain(day2.rain)} is_main={false} />
+                                    <div style={{marginTop: '57px'}}>
+                                        <span id="currentSummary">{day2.weather[0].main}</span><br/>
+                                        <span>Precipitation: </span><span id="currentRain">{wFunc.showRain(day2.rain)}</span><span> mm</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-6 col-md-2 forecast-container">
-                            <div className="forecast-header">Wednesday</div>
+                        <div className="col-6 col-sm-6 col-md-6 col-lg-2 forecast-container">
+                            <div className="forecast-header">{wFunc.getWeekDay(day3.dt)}</div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
-                                    <div className="wi wi-day-light-wind" id="forecastIcon"></div>
+                                    <Icon cod={day3.weather[0].id} dt={day3.dt} id="forecastIcon" />
                                     <h1 className="temp-forecast">
-                                        <span>{Math.floor(day3.main.temp)}°</span>
+                                        <span>{Math.floor(day3.temp.day)}°</span>
                                     </h1>
-                                    <h5>
-                                        <span>{Math.floor(day3.main.temp_min)}°</span>
-                                    </h5>
+                                </div>
+                            </div>
+                            <div className="row forecast-footer forecast-footer-m">
+                                <div className="col-sm-12 footer-desc">
+                                    <UmbrellaMessage rain={wFunc.showRain(day3.rain)} is_main={false} />
+                                    <div style={{marginTop: '57px'}}>
+                                        <span id="currentSummary">{day3.weather[0].main}</span><br/>
+                                        <span>Precipitation: </span><span id="currentRain">{wFunc.showRain(day3.rain)}</span><span> mm</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-6 col-md-2 forecast-container">              
-                            <div className="forecast-header">Thursday</div>
+                        <div className="col-6 col-sm-6 col-md-6 col-lg-2 forecast-container">              
+                            <div className="forecast-header">{wFunc.getWeekDay(day4.dt)}</div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
-                                    <div className="wi wi-day-cloudy-gusts" id="forecastIcon"></div>
+                                    <Icon cod={day4.weather[0].id} dt={day4.dt} id="forecastIcon" />
                                     <h1 className="temp-forecast">
-                                        <span>{Math.floor(day4.main.temp)}°</span>
+                                        <span>{Math.floor(day4.temp.day)}°</span>
                                     </h1>
-                                    <h5>
-                                        <span>{Math.floor(day4.main.temp_min)}°</span>
-                                    </h5>
+                                </div>
+                            </div>
+                            <div className="row forecast-footer forecast-footer-m">
+                                <div className="col-sm-12 footer-desc">
+                                    <UmbrellaMessage rain={wFunc.showRain(day4.rain)} is_main={false} />
+                                    <div style={{marginTop: '57px'}}>
+                                        <span id="currentSummary">{day4.weather[0].main}</span><br/>
+                                        <span>Precipitation: </span><span id="currentRain">{wFunc.showRain(day4.rain)}</span><span> mm</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -145,8 +181,8 @@ export class WeatherDisplay extends Component {
                     <div className="row no-gutters">
                         <div className="col-sm-12 col-md-4 forecast-container">
                             <div className="forecast-header">
-                                <span className="float-left">Sunday</span>
-                                <span className="float-right">24 Feb</span>
+                                <span className="float-left"></span>
+                                <span className="float-right"></span>
                             </div>
                             <div className="row">
                                 <div className="col-1 col-sm-1 col-md-1"></div>
@@ -169,7 +205,7 @@ export class WeatherDisplay extends Component {
                             </div>
                         </div>
                         <div className="col-sm-6 col-md-2 forecast-container">
-                            <div className="forecast-header">Monday</div>
+                            <div className="forecast-header"></div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
                                     <Loading size="lg-spinner" color="text-muted" />
@@ -177,7 +213,7 @@ export class WeatherDisplay extends Component {
                             </div>
                         </div>
                         <div className="col-sm-6 col-md-2 forecast-container">
-                            <div className="forecast-header">Tuesday</div>
+                            <div className="forecast-header"></div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
                                     <Loading size="lg-spinner" color="text-muted" />
@@ -185,7 +221,7 @@ export class WeatherDisplay extends Component {
                             </div>
                         </div>
                         <div className="col-sm-6 col-md-2 forecast-container">
-                            <div className="forecast-header">Wednesday</div>
+                            <div className="forecast-header"></div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
                                     <Loading size="lg-spinner" color="text-muted" />
@@ -193,7 +229,7 @@ export class WeatherDisplay extends Component {
                             </div>
                         </div>
                         <div className="col-sm-6 col-md-2 forecast-container">              
-                            <div className="forecast-header">Thursday</div>
+                            <div className="forecast-header"></div>
                             <div className="row">
                                 <div className="col-sm-12 text-center">
                                     <Loading size="lg-spinner" color="text-muted" />
@@ -211,7 +247,8 @@ const mapStateToProps = (state) => {
     return {
         weather: state.weather.weather,
         isLoading: state.weather.isLoading,
-        error: state.weather.error
+        error: state.weather.error,
+        fav_star: state.fav_star
     }
 }
 

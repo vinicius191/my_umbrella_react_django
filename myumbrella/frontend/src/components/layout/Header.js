@@ -6,7 +6,7 @@ export class Header extends Component {
             <div className="site-header">
 				<div className="container">
 					
-                    <a href="index.html" className="branding">
+                    <a href="" className="branding">
 						<img src="../../../static/images/logo.png" alt="" className="logo" />
 						<div className="logo-type">
 							<h1 className="site-title">My Umbrella</h1>
@@ -17,7 +17,7 @@ export class Header extends Component {
 					<div className="main-navigation">
 						<button type="button" className="menu-toggle"><i className="fa fa-bars"></i></button>
 						<ul className="menu">
-							<li className="menu-item current-menu-item"><a href="index.html">Home</a></li>
+							<li className="menu-item current-menu-item"><a href="">Home</a></li>
 						</ul>
 					</div>
 

@@ -33,8 +33,35 @@ body {
 
 .forecast-footer {
     padding: 25px 10px 10px 10px;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.forecast-footer-m {
+    text-align: start;
     font-size: 12px;
     font-weight: 200;
+}
+
+.footer-desc {
+    padding-top: 0px;
+}
+
+.badge-umbrella-message {
+    width: -webkit-fill-available;
+    background-color: #009ad8;
+    font-weight: 100;
+    border-radius: 3px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 12px;
+    -webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.25);
+}
+
+.badge-umbrella-message-clear {
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 #currentIcon {
@@ -45,14 +72,14 @@ body {
 }
 
 #forecastIcon {
-    font-size: 32px;
+    font-size: 36px;
     text-align: center;
     margin-top: 20px;
     margin-bottom: 10px;
 }
 
 .temp {
-    font-size: 62px;
+    font-size: 92px;
     margin-bottom: 0px;
     font-weight: 600;
 }
@@ -125,7 +152,23 @@ form textarea {
     color: white; 
 }
 
-/* Loading Spinner Icons */
+.btn-primary-outline {
+    background-color: transparent;
+    border-style: none;
+}
+
+.btn-primary-outline:focus,.btn-primary-outline:active:focus,.btn-primary-outline.active:focus,
+.btn-primary-outline.focus,.btn-primary-outline:active.focus,.btn-primary-outline.active.focus,
+.btn-primary-outline:hover,.btn-primary-outline:active:hover,.btn-primary-outline.active:hover,
+.btn-primary-outline.hover,.btn-primary-outline:active.hover,.btn-primary-outline.active.hover {
+    outline: none;
+    border-style: none;
+    box-shadow:none;
+}
+
+/*
+ * Loading Spinner Icons 
+ */
 .lg-spinner {
     width: 3rem; 
     height: 3rem;
@@ -140,7 +183,7 @@ form textarea {
 /*
  * Header Styles
  */
- .site-header {
+.site-header {
     padding: 20px 0; 
 }
 
