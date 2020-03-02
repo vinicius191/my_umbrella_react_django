@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+# Heroku config
+import django_heroku
+django_heroku.settings(locals())
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,8 +28,6 @@ SECRET_KEY = 'dh9p^qas1_g-w2j!n0y=1%^z0qadm6(xug0_z%p=3cct%70@bq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
-ALLOWED_HOSTS = []
 
 APPEND_SLASH = False
 
@@ -40,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'boto',
+    'storages',
     'accounts',
     'frontend',
 ]
@@ -163,3 +167,12 @@ LOGGING = {
         },
     },
 }
+
+# Storage on S3 settings are stored as os.environs to keep settings.py clean
+if not DEBUG:
+   S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+   AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+   AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+   STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+   S3_URL = 'http://%s.s3.amazonaws.com/' % S3_BUCKET_NAME
+   STATIC_URL = S3_URL
