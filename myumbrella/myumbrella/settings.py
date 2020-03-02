@@ -14,7 +14,6 @@ import os
 
 # Heroku config
 import django_heroku
-django_heroku.settings(locals())
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -176,3 +175,5 @@ if not DEBUG:
    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
    S3_URL = 'http://%s.s3.amazonaws.com/' % S3_BUCKET_NAME
    STATIC_URL = S3_URL
+
+django_heroku.settings(locals())
