@@ -139,13 +139,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_TMP = os.path.join(BASE_DIR, 'static')
 
-STATIC_URL = '/static/'
-
 os.makedirs(STATIC_TMP, exist_ok=True)
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
 
 LOGGING = {
     'version': 1,
@@ -163,19 +157,25 @@ LOGGING = {
     },
 }
 
-# Storage on S3 settings are stored as os.environs to keep settings.py clean
-if not DEBUG:
-   S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
-   AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-   AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-   STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-   S3_URL = 'http://%s.s3.amazonaws.com/' % S3_BUCKET_NAME
-   STATIC_URL = S3_URL
-
 # This is new:
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
+
+    # Storage on S3 settings are stored as os.environs to keep settings.py clean
+    S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    S3_URL = 'http://' + S3_BUCKET_NAME + '.s3.amazonaws.com/'
+    STATIC_URL = S3_URL
+    ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+else:
+    STATIC_URL = '/static/'
+    
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
 
 django_heroku.settings(locals())
 
