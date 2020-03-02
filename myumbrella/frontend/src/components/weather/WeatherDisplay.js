@@ -23,12 +23,10 @@ export class WeatherDisplay extends Component {
     activeFav = (e) => {
         e.preventDefault();
         if(this.state.fav_star == "fa fa-star-o") {
-            console.log('City is not on Favorite list... Adding up');
             this.setState({
                 fav_star: "fa fa-star"
             });
         } else {
-            console.log('City is on Favorite list... Removing up');
             this.setState({
                 fav_star: "fa fa-star-o"
             });

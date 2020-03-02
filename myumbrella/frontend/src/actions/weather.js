@@ -17,7 +17,6 @@ export const getWeather = (_city_name) => async dispatch => {
        await axios
         .get(`/api/weather/${_city_name}/`)
         .then(res => {
-            console.log(res)
             dispatch({
                 type: GET_WEATHER,
                 payload: res.data
