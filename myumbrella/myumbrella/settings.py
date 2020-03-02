@@ -13,7 +13,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Heroku config
+import dj_database_url
 import django_heroku
+
+# To find local database
+import dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +31,7 @@ SECRET_KEY = 'dh9p^qas1_g-w2j!n0y=1%^z0qadm6(xug0_z%p=3cct%70@bq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 APPEND_SLASH = False
 
@@ -66,10 +71,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-MIDDLEWARE_CLASSES = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-]
-
 ROOT_URLCONF = 'myumbrella.urls'
 
 TEMPLATES = [
@@ -90,16 +91,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myumbrella.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 
 # Password validation
@@ -176,4 +172,12 @@ if not DEBUG:
    S3_URL = 'http://%s.s3.amazonaws.com/' % S3_BUCKET_NAME
    STATIC_URL = S3_URL
 
+# This is new:
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+
 django_heroku.settings(locals())
+
+# This is new
+del DATABASES['default']['OPTIONS']['sslmode']
