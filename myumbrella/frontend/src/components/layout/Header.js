@@ -7,7 +7,7 @@ export class Header extends Component {
 				<div className="container">
 					
                     <a href="" className="branding">
-						<img src="../../../static/images/logo.png" alt="" className="logo" />
+						<img src="{% static 'images/logo.png' %}" alt="" className="logo" />
 						<div className="logo-type">
 							<h1 className="site-title">My Umbrella</h1>
 							<small className="site-description">should I use my umbrella today?</small>

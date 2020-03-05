@@ -3,7 +3,7 @@ WEBPACK = [.]bin/webpack
 start: django react
 
 django:
-	python manage.py runserver & echo "$$!" > "django.pid" 
+	python manage.py runserver --nostatic & echo "$$!" > "django.pid" 
 
 react:
 	cd ../ && npm run dev & echo "$$!" > "react.pid" 
