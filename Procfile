@@ -1,2 +1,2 @@
 release: python myumbrella/manage.py migrate
-web: python myumbrella/manage.py runserver 0.0.0.0:$PORT --noreload
+web: gunicorn --chdir myumbrella --log-file - myumbrella.wsgi:application
