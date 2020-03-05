@@ -35,7 +35,7 @@ export class WeatherSearchForm extends Component {
 
             <div className="hero" style={{backgroundImage: "url(../../../static/images/city-bg.jpg)"}}>
                 <div className="container">
-                    <div className="row no-gutters">
+                    <div className="row">
                         <div className="col-sm-12 col-md-12 col-12">
                             <form className="find-location" onSubmit={this.onSubmit}>
                                 <input 

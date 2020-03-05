@@ -50,7 +50,7 @@ export class WeatherDisplay extends Component {
                 <div className="container forecast-main-container">
                     
                     <div style={{marginBottom: '20px'}}>
-                        <div className="row no-gutters">
+                        <div className="row">
                             <div className="col-sm-12 col-md-12 col-12">
                                 <button type="button" className="btn btn-primary-outline" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}} onClick={this.activeFav}>
                                     <i className={this.state.fav_star} style={{marginRight: '10px'}}></i>
@@ -60,7 +60,7 @@ export class WeatherDisplay extends Component {
                         </div>
                     </div>
 
-                    <div className="row no-gutters">
+                    <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-4 forecast-container">
                             <div className="forecast-header">
                                 <span className="float-left">{wFunc.getWeekDay(today.dt)}</span>
@@ -176,7 +176,7 @@ export class WeatherDisplay extends Component {
         } else {
             return (
                 <div className="container forecast-main-container">
-                    <div className="row no-gutters">
+                    <div className="row">
                         <div className="col-sm-12 col-md-4 forecast-container">
                             <div className="forecast-header">
                                 <span className="float-left"></span>
