@@ -60,7 +60,7 @@ export class WeatherDisplay extends Component {
                         </div>
                     </div>
 
-                    <div className="row">
+                    <div className="row row-zero">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-4 forecast-container">
                             <div className="forecast-header">
                                 <span className="float-left">{wFunc.getWeekDay(today.dt)}</span>

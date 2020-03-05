@@ -17,6 +17,8 @@ body {
 .forecast-container {
     background: #323544;
     color: #FFFFFF;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .forecast-header {
@@ -324,4 +326,8 @@ form textarea {
 .mobile-navigation .menu .menu-item.current-menu-item a {
     color: #009ad8; 
 }
-  
+
+.row-zero {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
