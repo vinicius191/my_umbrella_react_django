@@ -32,7 +32,12 @@ export class WeatherSearchForm extends Component {
     render() {
         const { city_name, error } = this.state;
         return (
+<<<<<<< HEAD
             <div className="hero" style={{backgroundImage: "url('images/city-bg.jpg')"}}>
+=======
+
+            <div className="hero" style={{backgroundImage: "url({% static 'city-bg.jpg' %})"}}>
+>>>>>>> 80fceab80d7c4e0568102292b10cd320507dd76c
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12 col-md-12 col-12">
