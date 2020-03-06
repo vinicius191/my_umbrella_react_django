@@ -174,6 +174,7 @@ if os.path.isfile(dotenv_file):
         os.path.join(BASE_DIR, 'static')
     ]
 else:
+    '''
     # Storage on S3 settings are stored as os.environs to keep settings.py clean
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
@@ -194,6 +195,16 @@ else:
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static')
     ]
+    '''
+
+    STATIC_ROOT = os.path.join(BASE_DIR, '/staticfiles/')
+    STATIC_URL = os.path.join(BASE_DIR, '/static/')
+
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static')
+    ]
+
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
     django_heroku.settings(locals(), staticfiles=False)
 
