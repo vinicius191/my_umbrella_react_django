@@ -167,12 +167,14 @@ LOGGING = {
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
-    STATIC_ROOT = os.path.join(BASE_DIR, '/staticfiles/')
-    STATIC_URL = os.path.join(BASE_DIR, '/static/')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_URL = '/static/'
 
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static')
     ]
+
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 else:
     '''
     # Storage on S3 settings are stored as os.environs to keep settings.py clean
