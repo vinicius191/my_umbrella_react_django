@@ -31,9 +31,8 @@ export class WeatherDisplay extends Component {
                 fav_star: "fa fa-star-o"
             });
         }
-        
     }
-    
+
     render() {
         
         if(this.props.isLoading === false) {
@@ -52,10 +51,19 @@ export class WeatherDisplay extends Component {
                     <div style={{marginBottom: '20px'}}>
                         <div className="row">
                             <div className="col-sm-12 col-md-12 col-12">
-                                <button type="button" className="btn btn-primary-outline" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}} onClick={this.activeFav}>
-                                    <i className={this.state.fav_star} style={{marginRight: '10px'}}></i>
-                                    {this.props.weather.city.name}, {this.props.weather.city.country}
-                                </button>
+                                
+                                {
+                                    this.props.isAuthenticated 
+                                    ? 
+                                        <button type="button" className="btn btn-primary-outline" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}} onClick={this.activeFav}>
+                                            <i className={this.state.fav_star} style={{marginRight: '10px'}}></i>
+                                            {this.props.weather.city.name}, {this.props.weather.city.country}
+                                        </button>
+                                    : 
+                                        <button type="button" className="btn btn-primary-outline" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}}>
+                                            {this.props.weather.city.name}, {this.props.weather.city.country}
+                                        </button>
+                                }
                             </div>
                         </div>
                     </div>

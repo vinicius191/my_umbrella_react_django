@@ -34,7 +34,7 @@ export class WeatherSearchForm extends Component {
         const style = {
             backgroundImage: 'url(' + _STATIC_ + 'images/city-bg.jpg)',
         }
-        console.log('Static', _STATIC_)
+        
         return (
 
             <div className="hero" style={style}>
