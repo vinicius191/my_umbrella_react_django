@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import {connect} from 'react-redux';
 
 export class Header extends Component {
     render() {
-		console.log(this.props);
         return (
             <div className="site-header">
 				<div className="container">
@@ -49,4 +49,4 @@ export class Header extends Component {
     }
 }
 
-export default Header;
+export default connect()(Header);

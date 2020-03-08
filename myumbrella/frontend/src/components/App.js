@@ -1,12 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import WeatherDisplay from './weather/WeatherDisplay';
+import Weather from './weather/Weather';
 import { Header } from './layout/Header';
-
-import { BrowserRouter as Router } from 'react-router-dom';
-import WeatherSearchForm from './weather/WeatherSearchForm';
-
+import { BrowserRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
 import * as actions from '../actions/auth';
+import Login from './auth/Login';
 
 class App extends Component {
 
@@ -15,16 +13,23 @@ class App extends Component {
     }
 
     render() {
+        console.log('props', this.props)
         return (
-            <div>
-                <Fragment>
-                    <Router>
-                        <Header {...this.props} />
-                    </Router>
-                    <WeatherSearchForm />
-                    <WeatherDisplay {...this.props} />
-                </Fragment>
-            </div>
+            <Fragment>
+                <Header {...this.props} />
+                <Switch>
+                    <Route
+                        exact 
+                        path="/" 
+                        render={() => <Weather {...this.props}/>}
+                    />
+                    <Route 
+                        exact
+                        path="/login" 
+                        render={() => <Login {...this.props}/>}
+                    />
+                </Switch>
+            </Fragment>
         )
     }
 }
@@ -47,4 +52,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
