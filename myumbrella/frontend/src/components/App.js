@@ -5,6 +5,7 @@ import { Header } from './layout/Header';
 import { BrowserRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
 import * as actions from '../actions/auth';
 import Login from './auth/Login';
+import Register from './auth/Register';
 
 class App extends Component {
 
@@ -27,6 +28,11 @@ class App extends Component {
                         exact
                         path="/login" 
                         render={() => <Login {...this.props}/>}
+                    />
+                    <Route
+                        exact
+                        path="/register"
+                        render={() => <Register {...this.props}/>}
                     />
                 </Switch>
             </Fragment>

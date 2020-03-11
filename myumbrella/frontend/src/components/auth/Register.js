@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {authLogin} from '../../actions/auth';
+import {authSignup} from '../../actions/auth';
 import {connect} from 'react-redux';
 
-export class Login extends Component {
+export class Register extends Component {
     state = {
         username: '',
-        password: ''
+        email: '',
+        password: '',
+        password2: ''
     }
 
     static propTypes = {
-        authLogin: PropTypes.func.isRequired,
         isAuthenticated: PropTypes.bool
     }
 
     onSubmit = e => {
         e.preventDefault();
-        this.props.authLogin(this.state.username, this.state.password);
+        const { username, email, password, password2 } = this.state;
+        
+        if(password !== password2){
+            this.props.createMessage({passwordNotMatch: 'Passwords do not match'})
+        } else {
+            const newUser = {
+                username,
+                email, 
+                password,
+                password2
+            }
+            this.props.authSignup(newUser);
+        }
     }
 
     onChange = e => {
@@ -31,7 +44,7 @@ export class Login extends Component {
           return <Redirect to="/" />;
         }
 
-        const { username, password } = this.state;
+        const { username, email, password, password2 } = this.state;
         const style = {
             backgroundImage: 'url(' + _STATIC_ + 'images/city-bg.jpg)',
         }
@@ -46,7 +59,7 @@ export class Login extends Component {
                                 <div className="row">
                                     <div className="col-10 offset-1" style={{marginTop: '10px'}}>
                                         <button type="button" className="btn btn-primary-outline" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}}>
-                                            Login
+                                            Register
                                         </button>
                                     </div>
                                     <div className="col-10 offset-1">
@@ -63,6 +76,16 @@ export class Login extends Component {
                                                     />
                                                 </div>
                                                 <div className="form-group">
+                                                    <label>Email</label>
+                                                    <input
+                                                        type="email"
+                                                        className="form-control"
+                                                        name="email"
+                                                        onChange={this.onChange}
+                                                        value={email}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
                                                     <label>Password</label>
                                                     <input
                                                         type="password"
@@ -73,10 +96,20 @@ export class Login extends Component {
                                                     />
                                                 </div>
                                                 <div className="form-group">
-                                                    <button type="submit" className="btn btn-primary">Login</button>
+                                                    <label>Confirm Password</label>
+                                                    <input
+                                                        type="password"
+                                                        className="form-control"
+                                                        name="password2"
+                                                        onChange={this.onChange}
+                                                        value={password2}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <button type="submit" className="btn btn-primary">Register</button>
                                                 </div>
                                                 <p>
-                                                    Don't have an account? <Link to="/register">Register</Link>
+                                                    Already have an account? <Link to="/login">Login</Link>
                                                 </p>
                                             </form>
                                         </div>
@@ -95,4 +128,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, {authLogin})(Login);
+export default connect(mapStateToProps, {authSignup})(Register);

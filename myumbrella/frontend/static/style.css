@@ -331,3 +331,18 @@ form textarea {
     margin-right: 0px !important;
     margin-left: 0px !important;
 }
+
+.card-login {
+    background-color: #323544;
+    color: #FFFFFF;
+    margin-top: 10px !important;
+}
+
+.forecast-card-container {
+    opacity: .98;
+    border-radius: 10px;
+    border: 1px solid #212529;
+    -webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.25);
+}

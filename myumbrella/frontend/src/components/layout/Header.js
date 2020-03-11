@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 export class Header extends Component {
     render() {
+
         return (
             <div className="site-header">
 				<div className="container">
@@ -32,10 +33,15 @@ export class Header extends Component {
 								</li>
 
 								:
-
-								<li className="menu-item current-menu-item">
-									<Link to="/login">Login</Link>
-								</li>
+								<>
+									<li className="menu-item current-menu-item">
+										<Link to="/login">Login</Link>
+									</li>
+									
+									<li className="menu-item current-menu-item">
+										<Link to="/register">Register</Link>
+									</li>
+								</>
 							}
 
 						</ul>
