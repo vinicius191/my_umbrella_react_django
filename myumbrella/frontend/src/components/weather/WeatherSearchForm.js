@@ -22,7 +22,7 @@ export class WeatherSearchForm extends Component {
         e.preventDefault();
         const { city_name } = this.state;
         const { error } = this.props;
-        this.props.getWeather(city_name);
+        this.props.getWeather(city_name, false);
         this.setState({
             city_name: '',
             error: ''
