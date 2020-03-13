@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { GET_WEATHER, WEATHER_LOADING, WEATHER_ERROR } from './types';
+import { GET_WEATHER, WEATHER_LOADING, WEATHER_ERROR, WEATHER_INITIAL_REQUEST } from './types';
 
 export const getWeather = (_city_name, _initialReq) => async dispatch => {
-    console.log('_initialReq', _initialReq)
     if(_initialReq === true) {
         dispatch({
             type: WEATHER_INITIAL_REQUEST 
@@ -30,9 +29,9 @@ export const getWeather = (_city_name, _initialReq) => async dispatch => {
             })
             .catch(err => {
                 if (err.response) {
-                    throw new Error(err.response.data.message)
+                    throw new Error(err.response.data.error)
                 } else if(err.response.request) {
-                    throw new Error(err.response.request)
+                    throw new Error(err.response.request.statusText)
                 } else {
                     throw new Error('Error -1')
                 }
@@ -40,7 +39,7 @@ export const getWeather = (_city_name, _initialReq) => async dispatch => {
         } catch(e) {
             dispatch({
                 type: WEATHER_ERROR,
-                payload: e||'Error'
+                payload: e.message||'Error'
             })
         }
     }

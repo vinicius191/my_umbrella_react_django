@@ -12,20 +12,23 @@ export default function(state = initialState, action) {
         case WEATHER_INITIAL_REQUEST:
             return {
                 ...state,
-                initialReq: true
+                initialReq: true,
+                error: null
             };
         case WEATHER_LOADING:
             return {
                 ...state,
                 isLoading: true,
-                initialReq: false
+                initialReq: false,
+                error: null
             };
         case GET_WEATHER:
             return {
                 ...state,
                 weather: action.payload,
                 isLoading: false,
-                initialReq: true
+                initialReq: true,
+                error: null
             };
         case WEATHER_ERROR:
             return {

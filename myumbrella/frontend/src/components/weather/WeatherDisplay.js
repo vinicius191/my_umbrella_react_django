@@ -17,7 +17,6 @@ export class WeatherDisplay extends Component {
     };
 
     componentDidMount() {
-        console.log('didMount')
         this.props.getWeather('Sydney', true);
     }
 
@@ -36,7 +35,7 @@ export class WeatherDisplay extends Component {
 
     render() {
         
-        if(this.props.isLoading === false) {
+        if(this.props.isLoading === false && !this.props.error) {
 
             const today = this.props.weather.list[0];
             const day1 = this.props.weather.list[1];
@@ -184,13 +183,15 @@ export class WeatherDisplay extends Component {
             )
         } else {
 
-            if(this.props.initialReq === true) {
+            if(this.props.initialReq === true || this.props.error) {
                 return (
                     <div className="container forecast-main-container">
                         <div style={{marginBottom: '20px'}}>
                             <div className="row">
                                 <div className="col-sm-12 col-md-12 col-12">
-                                   Please search for a City...
+                                   {
+                                       this.props.error ? <div>Error</div> : <div>Please search for a City...</div>
+                                   }
                                 </div>
                             </div>
                         </div>
@@ -206,7 +207,9 @@ export class WeatherDisplay extends Component {
                                     <div className="col-9 col-sm-9 col-md-9">
                                         <div className="row text-center">
                                             <div className="col-sm-12" style={{marginTop: '20px'}}>
-                                                Please search for a City...
+                                            {
+                                                this.props.error ? this.props.error : <div>Please search for a City...</div>
+                                            }
                                             </div>
                                         </div>
                                     </div>
@@ -308,7 +311,8 @@ const mapStateToProps = (state) => {
         isLoading: state.weather.isLoading,
         error: state.weather.error,
         fav_star: state.fav_star,
-        initialReq: state.weather.initialReq
+        initialReq: state.weather.initialReq,
+        error: state.weather.error
     }
 }
 
