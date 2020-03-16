@@ -197,7 +197,7 @@ export class WeatherDisplay extends Component {
                         </div>
 
                         <div className="row row-zero">
-                            <div className="col-12 col-sm-12 col-md-12 col-lg-4 forecast-container">
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 forecast-container">
                                 <div className="forecast-header">
                                     <span className="float-left"></span>
                                     <span className="float-right"></span>

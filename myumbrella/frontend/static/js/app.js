@@ -2,11 +2,21 @@
 	
 	$(document).ready(function(){
 
-		// Cloning main navigation for mobile menu
-		$(".mobile-navigation").append($(".main-navigation .menu").clone());
+		function jqueryManageClick() {
+			// Cloning main navigation for mobile menu
+			$(".mobile-navigation").empty().append($(".main-navigation .menu").clone());
+
+			$(".mobile-navigation .logged-logout").click(function(e){
+				e.preventDefault();
+				window.location.href="/logout";
+			});
+		}
+
+		jqueryManageClick();
 
 		// Mobile menu toggle 
 		$(".menu-toggle").click(function(){
+			jqueryManageClick();
 			$(".mobile-navigation").slideToggle();
 		});
 

@@ -11,13 +11,17 @@ export class Login extends Component {
     }
 
     static propTypes = {
-        authLogin: PropTypes.func.isRequired,
-        isAuthenticated: PropTypes.bool
+        authLogin: PropTypes.func.isRequired
     }
 
     onSubmit = e => {
         e.preventDefault();
         this.props.authLogin(this.state.username, this.state.password);
+
+        if (this.props.isAuthenticated) {
+            console.log('here....')
+            this.props.history.push('/');
+        }
     }
 
     onChange = e => {
@@ -27,6 +31,7 @@ export class Login extends Component {
     }
 
     render() {
+        console.log('Login', this.props);
         if (this.props.isAuthenticated) {
           return <Redirect to="/" />;
         }
@@ -49,7 +54,18 @@ export class Login extends Component {
                                             Login
                                         </button>
                                     </div>
+                                    
                                     <div className="col-10 offset-1">
+                                        {
+
+                                            this.props.error
+                                            ?
+                                                <div style={{padding: '1.25rem', marginBottom: '-20px', color: '#ff0039'}}>
+                                                    {this.props.error}
+                                                </div>
+                                            :
+                                                <div></div>
+                                        }
                                         <div className="card card-body mt-5 card-login border-0">
                                             <form onSubmit={this.onSubmit}>
                                                 <div className="form-group">
@@ -91,8 +107,11 @@ export class Login extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-});
+const mapStateToProps = state => {
+
+    return {
+        error: state.auth.error 
+    }
+};
 
 export default connect(mapStateToProps, {authLogin})(Login);
