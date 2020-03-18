@@ -1,9 +1,17 @@
-from rest_framework import generics, permissions, status, exceptions
+from rest_framework import generics, permissions, status, exceptions, viewsets
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
+from rest_framework.authtoken.models import Token
 import os
 import logging
 import requests
+from .models import Favourite
+from .serializers import FavouriteSerializer
+from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
+from .utils import pretty_request
 
 # Get an instance of a logger
 logger = logging.getLogger('my_app')
@@ -39,3 +47,26 @@ class GetWeather(generics.GenericAPIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FavouriteViewSet(viewsets.ModelViewSet):
+    
+    permissions_classes = [
+        permissions.IsAuthenticated,
+    ]
+    serializer_class = FavouriteSerializer
+
+    def get_queryset(self, request, *args, **kwargs):
+        logger.info("get_query")
+        queryset = Favourite.objects.all()
+        return queryset
+    
+    def perform_create(self, serializer):
+        logger.info("perform_create %s", self.request.data['city_country'])
+        user = User.objects.get(username=self.request.user)
+        fav = Favourite()
+        fav.city_country = self.request.data['city_country']
+        fav.user = user
+        fav.save()
+
+

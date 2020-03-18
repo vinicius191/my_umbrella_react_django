@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'boto3',
     'accounts',
     'frontend',
+    'api',
 ]
 
 CACHES = {

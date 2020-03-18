@@ -6,6 +6,7 @@ import { Loading } from '../utils/Loading';
 import { Icon } from '../utils/Icon';
 import { UmbrellaMessage } from '../utils/UmbrellaMessage';
 import * as wFunc from '../utils/weatherFunction';
+import axios from 'axios'
 
 export class WeatherDisplay extends Component {
     state = {
@@ -31,6 +32,32 @@ export class WeatherDisplay extends Component {
                 fav_star: "fa fa-star-o"
             });
         }
+        let city_country = this.props.weather.city.name + ", " + this.props.weather.city.country;
+        this.isertFav(city_country, this.props.auth.token);
+    }
+
+    isertFav = (city_country, token) => {
+        console.log('called insertFav');
+        axios.defaults.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`,
+            'X-CSRFToken' : this.getCsrfToken()
+        }
+        
+        axios.post('api/favourite', {
+            city_country: city_country
+        })
+        .then(res => {
+            console.log('insertFav res', res);
+        })
+        .catch(err => {
+            console.log('insertFav error', err);
+        })
+    }
+
+    getCsrfToken = () => {
+        let csrf = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)');
+        return csrf ? csrf.pop() : '';
     }
 
     render() {
