@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { GET_WEATHER, WEATHER_LOADING, WEATHER_ERROR, WEATHER_INITIAL_REQUEST } from './types';
+import { GET_WEATHER, WEATHER_LOADING, WEATHER_ERROR, WEATHER_INITIAL_REQUEST} from './types';
+import * as Utils from './utils'; 
 
-export const getWeather = (_city_name, _initialReq) => async dispatch => {
+export const getWeather = (_city_name, _initialReq, _token) => async dispatch => {
     if(_initialReq === true) {
         dispatch({
             type: WEATHER_INITIAL_REQUEST 
@@ -18,6 +19,14 @@ export const getWeather = (_city_name, _initialReq) => async dispatch => {
                 }
                 return config;
             });
+
+            if(_token) {
+                axios.defaults.headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${_token}`,
+                    'X-CSRFToken' : Utils.getCsrfToken()
+                };
+            }
     
            await axios
             .get(`/api/weather/${_city_name}/`)

@@ -1,4 +1,4 @@
-import { GET_WEATHER, WEATHER_LOADING, WEATHER_ERROR, WEATHER_INITIAL_REQUEST } from '../actions/types.js';
+import { GET_WEATHER, WEATHER_LOADING, WEATHER_ERROR, WEATHER_INITIAL_REQUEST, WEATHER_UPDATE_FAVOURITE } from '../actions/types.js';
 
 const initialState = {
     weather: [],
@@ -37,6 +37,17 @@ export default function(state = initialState, action) {
                 error: action.payload,
                 initialReq: false
             };
+        case WEATHER_UPDATE_FAVOURITE:
+            console.log('w -1', state.weather, action.payload);
+            let w = {...state.weather, favourite: action.payload.favourite}
+            console.log('w 0', w, action.payload);
+            return {
+                ...state,
+                isLoading: false,
+                error: null,
+                initialReq: false,
+                weather: w
+            }
         default:
             return state;
     }

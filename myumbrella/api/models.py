@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.contrib.auth.models import User
 
 class Favourite(models.Model):
     user = models.ForeignKey(
@@ -13,6 +14,12 @@ class Favourite(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     created_at.editable=True
+
+    def json(self):
+        return {
+            'city_country': self.city_country,
+            'username': str(User.objects.get(username=self.user))
+        }
 
 class Meta:
     verbose_name = ("Favourite")

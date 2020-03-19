@@ -4,3 +4,8 @@ export const updateObject = (oldObject, updatedObject) => {
         ...updatedObject
     }
 }
+
+export const getCsrfToken = () => {
+    let csrf = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)');
+    return csrf ? csrf.pop() : '';
+}

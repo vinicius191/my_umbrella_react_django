@@ -3,7 +3,8 @@ from .api import GetWeather, FavouriteViewSet
 
 fav_list = FavouriteViewSet.as_view({
     'get': 'list',
-    'post': 'create'
+    'post': 'create',
+    'delete': 'destroy'
 })
 
 urlpatterns = [

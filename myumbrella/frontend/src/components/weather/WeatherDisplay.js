@@ -7,6 +7,7 @@ import { Icon } from '../utils/Icon';
 import { UmbrellaMessage } from '../utils/UmbrellaMessage';
 import * as wFunc from '../utils/weatherFunction';
 import axios from 'axios'
+import { favouriteAdd, favouriteRemove } from '../../actions/favourite';
 
 export class WeatherDisplay extends Component {
     state = {
@@ -14,16 +15,17 @@ export class WeatherDisplay extends Component {
     }
 
     static propTypes = {
-        getWeather: PropTypes.func.isRequired
+        getWeather: PropTypes.func.isRequired,
+        favouriteAdd: PropTypes.func.isRequired,
+        favouriteRemove: PropTypes.func.isRequired
     };
 
     componentDidMount() {
-        this.props.getWeather('Sydney', true);
+        this.props.getWeather('Sydney', true, this.props.auth.token);
     }
 
-    activeFav = (e) => {
-        e.preventDefault();
-        if(this.state.fav_star == "fa fa-star-o") {
+    favCheckState = (logged) => {
+        if(logged) {
             this.setState({
                 fav_star: "fa fa-star"
             });
@@ -32,32 +34,32 @@ export class WeatherDisplay extends Component {
                 fav_star: "fa fa-star-o"
             });
         }
+    }
+
+    activeFav = (e) => {
+        e.preventDefault();
         let city_country = this.props.weather.city.name + ", " + this.props.weather.city.country;
-        this.isertFav(city_country, this.props.auth.token);
-    }
-
-    isertFav = (city_country, token) => {
-        console.log('called insertFav');
-        axios.defaults.headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`,
-            'X-CSRFToken' : this.getCsrfToken()
+        if(this.props.weather.favourite.star == "fa fa-star-o") {
+            this.props.favouriteAdd(city_country, this.props.auth.token);
+            if(this.props.favError) {
+                console.error('WeatherDisplay -> activeFav -> favouriteAdd()', this.props.favError);
+            } else {
+                this.setState({
+                    fav_star: "fa fa-star"
+                });
+            }
+            // TODO Show error mesasge on screen
+        } else {
+            this.props.favouriteRemove(city_country, this.props.auth.token);
+            if(this.props.favError) {
+                console.error('WeatherDisplay -> activeFav -> favouriteRemove()', this.props.favError);
+            } else {
+                this.setState({
+                    fav_star: "fa fa-star-o"
+                });
+            }
+            // TODO Show error message on sceen
         }
-        
-        axios.post('api/favourite', {
-            city_country: city_country
-        })
-        .then(res => {
-            console.log('insertFav res', res);
-        })
-        .catch(err => {
-            console.log('insertFav error', err);
-        })
-    }
-
-    getCsrfToken = () => {
-        let csrf = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)');
-        return csrf ? csrf.pop() : '';
     }
 
     render() {
@@ -83,7 +85,9 @@ export class WeatherDisplay extends Component {
                                     this.props.isAuthenticated 
                                     ? 
                                         <button type="button" className="btn btn-primary-outline" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}} onClick={this.activeFav}>
-                                            <i className={this.state.fav_star} style={{marginRight: '10px'}}></i>
+                                            
+                                            <i className={this.props.weather.favourite.star} style={{marginRight: '10px'}}></i>
+                                            
                                             {this.props.weather.city.name}, {this.props.weather.city.country}
                                         </button>
                                     : 
@@ -339,11 +343,13 @@ const mapStateToProps = (state) => {
         error: state.weather.error,
         fav_star: state.fav_star,
         initialReq: state.weather.initialReq,
-        error: state.weather.error
+        error: state.weather.error,
+        favError: state.favourite.error,
+        favCityCountry: state.favourite.city_country
     }
 }
 
 export default connect(
     mapStateToProps, 
-    { getWeather }
+    { getWeather, favouriteAdd, favouriteRemove }
 )(WeatherDisplay);
