@@ -38,9 +38,7 @@ export default function(state = initialState, action) {
                 initialReq: false
             };
         case WEATHER_UPDATE_FAVOURITE:
-            console.log('w -1', state.weather, action.payload);
             let w = {...state.weather, favourite: action.payload.favourite}
-            console.log('w 0', w, action.payload);
             return {
                 ...state,
                 isLoading: false,

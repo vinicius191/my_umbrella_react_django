@@ -7,7 +7,7 @@ import { Icon } from '../utils/Icon';
 import { UmbrellaMessage } from '../utils/UmbrellaMessage';
 import * as wFunc from '../utils/weatherFunction';
 import axios from 'axios'
-import { favouriteAdd, favouriteRemove } from '../../actions/favourite';
+import { favouriteAdd, favouriteRemove, favCheck } from '../../actions/favourite';
 
 export class WeatherDisplay extends Component {
     state = {
@@ -17,11 +17,15 @@ export class WeatherDisplay extends Component {
     static propTypes = {
         getWeather: PropTypes.func.isRequired,
         favouriteAdd: PropTypes.func.isRequired,
-        favouriteRemove: PropTypes.func.isRequired
+        favouriteRemove: PropTypes.func.isRequired,
+        favCheck: PropTypes.func.isRequired
     };
 
     componentDidMount() {
         this.props.getWeather('Sydney', true, this.props.auth.token);
+        if(this.props.isAuthenticated){
+            this.props.favCheck(this.props.token);
+        }
     }
 
     favCheckState = (logged) => {
@@ -38,6 +42,9 @@ export class WeatherDisplay extends Component {
 
     activeFav = (e) => {
         e.preventDefault();
+
+        console.log('BEFORE', this.props.weather.favourite);
+
         let city_country = this.props.weather.city.name + ", " + this.props.weather.city.country;
         if(this.props.weather.favourite.star == "fa fa-star-o") {
             this.props.favouriteAdd(city_country, this.props.auth.token);
@@ -60,10 +67,12 @@ export class WeatherDisplay extends Component {
             }
             // TODO Show error message on sceen
         }
+
+        console.log('AFTER', this.props.weather.favourite);
     }
 
     render() {
-        
+        console.log(this.props.favs)
         if(this.props.isLoading === false && !this.props.error) {
 
             const today = this.props.weather.list[0];
@@ -79,8 +88,7 @@ export class WeatherDisplay extends Component {
                     
                     <div style={{marginBottom: '20px'}}>
                         <div className="row">
-                            <div className="col-sm-12 col-md-12 col-12">
-                                
+                            <div className="col-8 col-sm-8 col-md-6 col-lg-6 col-xl-6">
                                 {
                                     this.props.isAuthenticated 
                                     ? 
@@ -94,6 +102,15 @@ export class WeatherDisplay extends Component {
                                         <button type="button" className="btn btn-primary-outline" style={{color: '#FFF', fontSize: '18px', fontWeight: '400'}}>
                                             {this.props.weather.city.name}, {this.props.weather.city.country}
                                         </button>
+                                }
+                            </div>
+                            <div className="col-4 col-sm-4 col-md-6 col-lg-6 col-xl-6">
+                                {
+                                    this.props.favs && this.props.favs.length > 0 
+                                    ? 
+                                        <button type="button" className="btn btn-primary fav-cnt-btn pull-right">Favourites {this.props.favs.length}</button>
+                                    : 
+                                        <></>
                                 }
                             </div>
                         </div>
@@ -219,10 +236,19 @@ export class WeatherDisplay extends Component {
                     <div className="container forecast-main-container">
                         <div style={{marginBottom: '20px'}}>
                             <div className="row">
-                                <div className="col-sm-12 col-md-12 col-12">
+                                <div className="col-8 col-sm-8 col-md-6 col-lg-6 col-xl-6">
                                    {
-                                       this.props.error ? <div>Error</div> : <div>Please search for a City...</div>
+                                       this.props.error ? <div>Error</div> : <div style={{paddingTop: '6px'}}>Please search for a City...</div>
                                    }
+                                </div>
+                                <div className="col-4 col-sm-4 col-md-6 col-lg-6 col-xl-6">
+                                    {
+                                        this.props.favs && this.props.favs.length > 0 
+                                        ? 
+                                            <button type="button" className="btn btn-primary fav-cnt-btn pull-right">Favourites {this.props.favs.length}</button>
+                                        : 
+                                            <></>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -337,6 +363,12 @@ export class WeatherDisplay extends Component {
 }
 
 const mapStateToProps = (state) => {
+    var favs = []
+    if(typeof(state.favourite.favs)==='string'){
+        favs = JSON.parse(state.favourite.favs);
+    } else {
+        favs = state.favourite.favs
+    }
     return {
         weather: state.weather.weather,
         isLoading: state.weather.isLoading,
@@ -345,11 +377,12 @@ const mapStateToProps = (state) => {
         initialReq: state.weather.initialReq,
         error: state.weather.error,
         favError: state.favourite.error,
-        favCityCountry: state.favourite.city_country
+        favCityCountry: state.favourite.city_country,
+        favs: favs.favs
     }
 }
 
 export default connect(
     mapStateToProps, 
-    { getWeather, favouriteAdd, favouriteRemove }
+    { getWeather, favouriteAdd, favouriteRemove, favCheck }
 )(WeatherDisplay);

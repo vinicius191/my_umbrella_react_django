@@ -4,14 +4,21 @@ import {
     FAVOURITE_ADD_FAIL,
     FAVOURITE_REMOVE_START,
     FAVOURITE_REMOVE_SUCCESS,
-    FAVOURITE_REMOVE_FAIL 
+    FAVOURITE_REMOVE_FAIL,
+    FAVOURITE_CHECK_START,
+    FAVOURITE_CHECK_ADD_SUCCESS,
+    FAVOURITE_CHECK_REMOVE_SUCCESS,
+    FAVOURITE_CHECK_FAIL,
+    FAVOURITE_LOGOUT,
+    FAVOURITE_CHECK_SUCCESS
 } from '../actions/types';
 import { updateObject } from '../actions/utils';
 
 const initialState = {
     city_country: null,
     error: null,
-    loading: false    
+    loading: false,
+    favs: []    
 }
 
 const favouriteAddStart = (state, action) => {
@@ -72,6 +79,48 @@ const reducer = (state=initialState, action) => {
             return favouriteRemoveSuccess(state, action);
         case FAVOURITE_REMOVE_FAIL:
             return favouriteRemoveFail(state, action);
+        case FAVOURITE_CHECK_START:
+            return {
+                ...state,
+                loading: true
+            };
+        case FAVOURITE_CHECK_ADD_SUCCESS:
+            return {
+                ...state,
+                favs: action.payload,
+                loading: false
+            };
+        case FAVOURITE_CHECK_REMOVE_SUCCESS:
+            var _data = state.favs.filter(function(city_country) {
+                return city_country !== action.payload.city_country
+            });
+            console.log('_data', _data, 'state', satte, 'payload', action.payload)
+            return {
+                ...state,
+                favs: _data,
+                loading: false
+            };
+        case FAVOURITE_CHECK_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                favs: action.payload
+            };
+        case FAVOURITE_CHECK_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            };
+        case FAVOURITE_LOGOUT:
+            console.log('here 2', state)
+            return {
+                ...state,
+                city_country: null,
+                error: null,
+                loading: false,
+                favs: []    
+            }
         default:
             return state;
     }

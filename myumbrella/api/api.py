@@ -43,7 +43,8 @@ class GetWeather(generics.GenericAPIView):
             if jsonData['cod'] == '200':
                 if isinstance(request.user, User):
                     city_country = jsonData['city']['name'] + ', ' + jsonData['city']['country']
-                    fav = [fav.json() for fav in Favourite.objects.filter(city_country=city_country).all()]
+                    fav = [fav.json() for fav in Favourite.objects.filter(city_country=city_country, user=request.user).all()]
+                    logger.info("fav %s", fav)
                     if fav:
                         data = json.dumps(fav)
                         fav[0]['star'] = 'fa fa-star'
@@ -69,10 +70,23 @@ class FavouriteViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = FavouriteSerializer
 
-    def get_queryset(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
+        
+        response_ = Response
+
         logger.info("get_query")
-        queryset = Favourite.objects.all()
-        return queryset
+        fav = [fav.json() for fav in Favourite.objects.filter(user=request.user).all()]
+        logger.info("fav %s", fav)
+
+        jsonData = {}
+        jsonData['favs'] = []
+
+        if fav:
+            jsonData['favs'] = fav
+
+        response_ = HttpResponse(json.dumps(jsonData), content_type='application/json; charset=UTF-8', status=status.HTTP_200_OK)
+
+        return response_
     
     def perform_create(self, serializer):
         logger.info("perform_create %s", self.request.data['city_country'])

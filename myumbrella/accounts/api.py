@@ -5,6 +5,10 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger('my_app')
 
 # Register API
 class RegisterAPI(generics.GenericAPIView):
@@ -14,6 +18,7 @@ class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
+        logger.info("RegisterAPI data %s", request.data)
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.save()

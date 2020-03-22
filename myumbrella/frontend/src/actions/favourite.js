@@ -6,7 +6,13 @@ import {
     FAVOURITE_REMOVE_START,
     FAVOURITE_REMOVE_SUCCESS,
     FAVOURITE_REMOVE_FAIL,
-    WEATHER_UPDATE_FAVOURITE 
+    WEATHER_UPDATE_FAVOURITE,
+    FAVOURITE_CHECK_START,
+    FAVOURITE_CHECK_ADD_SUCCESS,
+    FAVOURITE_CHECK_REMOVE_SUCCESS,
+    FAVOURITE_CHECK_FAIL,
+    FAVOURITE_LOGOUT,
+    FAVOURITE_CHECK_SUCCESS  
 } from './types';
 import * as Utils from './utils'
 
@@ -42,7 +48,7 @@ export const favouriteAdd = (_city_country, _token) => {
             city_country: _city_country
         })
         .then(res => {
-            console.log('res', res);
+            dispatch(favLocalStorageAdd(res.data))
             dispatch(favouriteAddSuccess(_city_country));
             dispatch({
                 type: WEATHER_UPDATE_FAVOURITE,
@@ -99,6 +105,7 @@ export const favouriteRemove = (_city_country, _token) => {
             }
         })
         .then(res => {
+            favLocalStorageRemove({'city_country': _city_country});
             dispatch(favouriteRemoveSuccess());
             dispatch({
                 type: WEATHER_UPDATE_FAVOURITE,
@@ -119,4 +126,96 @@ export const favouriteRemove = (_city_country, _token) => {
             }
         })
     };
+}
+
+export const favLogout = () => {
+    console.log('here')
+    return {
+        type: FAVOURITE_LOGOUT
+    }
+}
+
+export const favLocalStorageRemove = (_data) => {
+    var existing = localStorage.getItem('favs');
+    localStorage.removeItem('favs');
+    existing = existing ? JSON.parse(existing) : [];
+    var _exception = existing.filter(function(obj) {
+        return obj.city_country !== _data.city_country;
+    });
+    localStorage.setItem('favs', JSON.stringify(_exception));
+    favCheckRemoveSuccess(_data)
+    
+}
+
+export const favLocalStorageAdd = (_data) => {
+    var existing = localStorage.getItem('favs');
+    existing = existing ? JSON.parse(existing) : [];
+    existing.push(_data);
+    localStorage.setItem('favs', JSON.stringify(existing));
+    favCheckAddSuccess(_data)
+}
+
+export const favCheckStart = () => {
+    return {
+        type: FAVOURITE_CHECK_START
+    }
+}
+
+export const favCheckAddSuccess = (favs) => {
+    return {
+        type: FAVOURITE_CHECK_ADD_SUCCESS,
+        payload: favs
+    }
+}
+
+export const favCheckRemoveSuccess = (favs) => {
+    return {
+        type: FAVOURITE_CHECK_REMOVE_SUCCESS,
+        payload: favs
+    }
+}
+
+export const favCheckSuccess = (favs) => {
+    console.log('TOKEN 4', favs)
+    return {
+        type: FAVOURITE_CHECK_SUCCESS,
+        payload: favs
+    }
+}
+
+export const favCheckFail = (error) => {
+    return {
+        type: FAVOURITE_CHECK_FAIL,
+        payload: error
+    }
+}
+
+export const favCheck = (_token) => {
+    console.log('TOKEN 2', _token)
+    return dispatch => {
+        dispatch(favCheckStart());
+        dispatch(favActionCheck(_token));
+    };
+}
+
+export const favActionCheck = (_token) => {
+    console.log('TOKEN 3', _token)
+    return dispatch => {
+        axios.defaults.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${_token}`,
+            'X-CSRFToken' : Utils.getCsrfToken()
+        };
+        axios.get('api/favourite')
+        .then(res => {
+            dispatch(favCheckSuccess(res.data));
+        })
+        .catch(err => {
+            if(err.resonse) {
+                dispatch(favCheckFail(err.response.statusText));
+            } else {
+                dispatch(favCheckFail('Error to get user Favourites from database.'));
+            }
+        });
+    }
 }

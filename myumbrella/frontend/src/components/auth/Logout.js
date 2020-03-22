@@ -11,6 +11,7 @@ export class Logout extends Component {
     }
 
     componentDidMount = () => {
+        console.log('Logout Component', this.props);
         this.props.authLogout();
 
         if (this.props.isAuthenticated) {

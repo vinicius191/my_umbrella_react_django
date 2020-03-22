@@ -9,11 +9,11 @@ import Login from './auth/Login';
 import Register from './auth/Register';
 import PropTypes from 'prop-types';
 import Logout from './auth/Logout';
+import Favourites from './weather/Favourites';
 
 class App extends Component {
 
     componentDidMount() {
-        console.log('here mount')
         this.props.authCheckState();
     }
 
@@ -22,27 +22,23 @@ class App extends Component {
     }
 
     render() {
-        console.log('props', this.props.isAuthenticated)
         return (
             <Fragment>
                 <Header {...this.props} authLogout={actions.authLogout} />
                 <Switch>
-                    <Route
-                        exact 
-                        path="/" 
-                        render={() => <Weather {...this.props}/>}
+                    <Route exact path="/" 
+                        render={() => <Weather {...this.props} token={this.props.token}/>}
                     />
-                    <Route path="/login" 
+                    <Route exact path="/favourites"
+                        render={(props) => (<Favourites {...props} isAuthenticated={this.props.isAuthenticated} {...this.props}/>)}
+                    />
+                    <Route exact path="/login" 
                         render={(props) => (<Login {...props} isAuthenticated={this.props.isAuthenticated} {...this.props}/>)}
                     />
-                    <Route
-                        exact
-                        path="/register"
-                        render={() => <Register {...this.props}/>}
+                    <Route exact path="/register"
+                        render={(props) => (<Register {...props} isAuthenticated={this.props.isAuthenticated} {...this.props}/>)}
                     />
-                    <Route
-                        exact
-                        path="/logout"
+                    <Route exact path="/logout"
                         render={(props) => (<Logout {...props} isAuthenticated={this.props.isAuthenticated} {...this.props}/>)}
                     />
                 </Switch>
@@ -52,19 +48,23 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-    let _check;
+    var _check;
+    var _token;
     if(localStorage.getItem('token')!==null){
         _check = true;
+        _token = localStorage.getItem('token');
     } else {
         if(!state.auth.token) {
             _check = false;       
         } else {
             _check = true;
+            _token = state.auth.token
         }
     }
     return {
         isAuthenticated: _check,
-        auth: state.auth
+        auth: state.auth,
+        token: _token
     }
 }
 

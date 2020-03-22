@@ -373,3 +373,10 @@ a {
 .logged-menu-item {
     padding: 5px 25px;
 }
+
+.fav-cnt-btn {
+    border: none;
+    background: #009ad8;
+    border-radius: 0px;
+    color: white;
+}

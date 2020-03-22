@@ -1,5 +1,7 @@
 import * as actionTypes from './types'
 import axios from 'axios'
+import * as Utils from './utils'
+import {favLogout, favCheck} from './favourite';
 
 export const authStart = () => {
     return {
@@ -23,7 +25,6 @@ export const authFail = error => {
 }
 
 const checkAuthTimeOut = expirationTime => {
-    console.log('called from checkAuthTimeOut')
     return dispatch => {
         setTimeout(() => {
             dispatch(logout())
@@ -39,16 +40,18 @@ export const authLogin = (username, password) => {
             password: password
         })
         .then(res => {
-            const token = res.data.token;
-            const expirationTime = new Date(new Date().getTime() + 3600 * 1000);
+            var token = res.data.token;
+            var expirationTime = new Date(new Date().getTime() + 3600 * 1000);
             localStorage.setItem('token', token);
             localStorage.setItem('expirationTime', expirationTime);
             localStorage.setItem('username', res.data.user.username);
+            console.log('TOKEN', token)
+            //dispatch(favCheck(token));
             dispatch(authSuccess(token, res.data.user.username));
             dispatch(checkAuthTimeOut(3600));
         })
         .catch(err => {
-            if(err.resonse) {
+            if(err.response) {
                 dispatch(authFail(err.response.statusText))
             } else {
                 dispatch(authFail('Error to authenticate user.'))
@@ -57,14 +60,14 @@ export const authLogin = (username, password) => {
     }
 }
 
-export const authSignup = (username, email, password1, password2) => {
+export const authSignup = (_data) => {
     return dispatch => {
         dispatch(authStart());
         axios.post('auth/register/', {
-            username: username,
-            email: email,
-            password1: password1,
-            password2: password2
+            username: _data.username,
+            email: _data.email,
+            password: _data.password,
+            password2: _data.password2
         })
         .then(res => {
             const token = res.data.token;
@@ -76,24 +79,24 @@ export const authSignup = (username, email, password1, password2) => {
             dispatch(checkAuthTimeOut(3600));
         })
         .catch(err => {
-            if(err.resonse) {
-                dispatch(authFail(err.response.statusText))
+            if(err.response !== null) {
+                let str_error = Utils.strAuthHandler(err.response.data, "create user.");
+                dispatch(authFail(str_error))
             } else {
-                dispatch(authFail('Error to authenticate user.'))
+                dispatch(authFail('Error to create user.'))
             }
         })
     }
 }
 
 export const authLogout = () => {
-    console.log('called from doLogout');
     return dispatch => {
         dispatch(logout());
+        dispatch(favLogout());
     }
 }
 
 export const logout = () => {
-    console.log('called from logout')
     localStorage.removeItem('token');
     localStorage.removeItem('expirationTime');
     localStorage.removeItem('username');
@@ -104,7 +107,6 @@ export const logout = () => {
 
 export const authCheckState = () => {
     return dispatch => {
-        console.log('called from authCheckState')
         const token = localStorage.getItem('token');
         const username = localStorage.getItem('username');
         if (token === 'undefined') {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {authSignup} from '../../actions/auth';
+import {authSignup, authFail} from '../../actions/auth';
 import {connect} from 'react-redux';
 
 export class Register extends Component {
@@ -13,7 +13,9 @@ export class Register extends Component {
     }
 
     static propTypes = {
-        isAuthenticated: PropTypes.bool
+        isAuthenticated: PropTypes.bool,
+        authSignup: PropTypes.func.isRequired,
+        authFail: PropTypes.func.isRequired
     }
 
     onSubmit = e => {
@@ -21,7 +23,7 @@ export class Register extends Component {
         const { username, email, password, password2 } = this.state;
         
         if(password !== password2){
-            this.props.createMessage({passwordNotMatch: 'Passwords do not match'})
+            this.props.authFail('Passwords do not match');
         } else {
             const newUser = {
                 username,
@@ -30,6 +32,10 @@ export class Register extends Component {
                 password2
             }
             this.props.authSignup(newUser);
+
+            if (this.props.isAuthenticated) {
+                this.props.history.push('/');
+            }
         }
     }
 
@@ -41,7 +47,7 @@ export class Register extends Component {
 
     render() {
         if (this.props.isAuthenticated) {
-          return <Redirect to="/" />;
+            return <Redirect to="/" />;
         }
 
         const { username, email, password, password2 } = this.state;
@@ -62,7 +68,17 @@ export class Register extends Component {
                                             Register
                                         </button>
                                     </div>
+
                                     <div className="col-10 offset-1">
+                                        {
+                                            this.props.error
+                                            ?
+                                                <div style={{padding: '1.25rem', marginBottom: '-20px', color: '#ff0039'}}>
+                                                    {this.props.error}
+                                                </div>
+                                            :
+                                                <div></div>
+                                        }
                                         <div className="card card-body mt-5 card-login border-0">
                                             <form onSubmit={this.onSubmit}>
                                                 <div className="form-group">
@@ -124,8 +140,10 @@ export class Register extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-});
+const mapStateToProps = state => {
+    return {
+        error: state.auth.error 
+    }
+};
 
-export default connect(mapStateToProps, {authSignup})(Register);
+export default connect(mapStateToProps, {authSignup, authFail})(Register);

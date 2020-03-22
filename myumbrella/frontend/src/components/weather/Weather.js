@@ -7,7 +7,7 @@ export default class Weather extends Component {
         return (
             <Fragment>
                 <WeatherSearchForm {...this.props}/>
-                <WeatherDisplay {...this.props}/>
+                <WeatherDisplay {...this.props} token={this.props.token}/>
             </Fragment>
         )
     }

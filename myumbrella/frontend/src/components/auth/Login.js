@@ -19,7 +19,6 @@ export class Login extends Component {
         this.props.authLogin(this.state.username, this.state.password);
 
         if (this.props.isAuthenticated) {
-            console.log('here....')
             this.props.history.push('/');
         }
     }
@@ -31,9 +30,8 @@ export class Login extends Component {
     }
 
     render() {
-        console.log('Login', this.props);
         if (this.props.isAuthenticated) {
-          return <Redirect to="/" />;
+            return <Redirect to="/" />;
         }
 
         const { username, password } = this.state;
