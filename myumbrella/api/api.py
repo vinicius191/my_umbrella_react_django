@@ -63,6 +63,49 @@ class GetWeather(generics.GenericAPIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class GetWeatherFav(generics.GenericAPIView):
+    permissions_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    def get(self, request):
+        weather_apikey = os.environ.get('WEATHER_KEY')
+        weather_unit = os.environ.get('WEATHER_UNIT')
+        weather_url = os.environ.get('WEATHER_FAV_URL')
+
+        try:
+            favourites = Favourite.objects.filter(user=request.user).all()
+            my_favs = [fav.json() for fav in favourites]
+            
+            list_favs = []
+
+            for c in my_favs:
+                url = weather_url + c['city_country'] + '&units=' + weather_unit + '&appid=' + weather_apikey
+                item = self.fetch_data(url)
+
+                if item:
+                    list_favs.append(item)
+
+            return HttpResponse(json.dumps(list_favs), content_type='application/json; charset=UTF-8', status=status.HTTP_200_OK)
+        except requests.exceptions.RequestException as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def fetch_data(self, url):
+        HEADERS = {'user-agent': ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5)'
+                          'AppleWebKit/537.36 (KHTML, like Gecko)'
+                          'Chrome/45.0.2454.101 Safari/537.36'),
+                          'referer': 'http://stats.nba.com/scores/'}
+        r = requests.get(url)
+        jsonData = r.json()
+        
+        if str(jsonData['cod']) == '200':
+            logger.info("jsonData %s", jsonData)
+            return jsonData
+        else:
+            return []
+
 class FavouriteViewSet(viewsets.ModelViewSet):
     
     permissions_classes = [

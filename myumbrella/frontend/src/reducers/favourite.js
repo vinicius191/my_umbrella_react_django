@@ -10,7 +10,10 @@ import {
     FAVOURITE_CHECK_REMOVE_SUCCESS,
     FAVOURITE_CHECK_FAIL,
     FAVOURITE_LOGOUT,
-    FAVOURITE_CHECK_SUCCESS
+    FAVOURITE_CHECK_SUCCESS,
+    WEATHER_FAV_SUCCESS,
+    WEATHER_FAV_FAIL,
+    WEATHER_FAV_STARTED
 } from '../actions/types';
 import { updateObject } from '../actions/utils';
 
@@ -18,7 +21,8 @@ const initialState = {
     city_country: null,
     error: null,
     loading: false,
-    favs: []    
+    favs: [],
+    weather_fav: []    
 }
 
 const favouriteAddStart = (state, action) => {
@@ -119,8 +123,30 @@ const reducer = (state=initialState, action) => {
                 city_country: null,
                 error: null,
                 loading: false,
-                favs: []    
+                favs: [],
+                weather_fav: []   
             }
+        case WEATHER_FAV_SUCCESS:
+            console.log('WEATHER_FAV_SUCCESS', action);
+            return {
+                ...state,
+                weather_fav: action.payload,
+                loading: false,
+                error: null
+            };
+        case WEATHER_FAV_FAIL:
+            return {
+                ...state,
+                error: action.payload,
+                loading: false
+            };
+        case WEATHER_FAV_STARTED:
+            console.log('WEATHER_FAV_STARTED', action);
+            return {
+                ...state,
+                loading: true,
+                error: null
+            };
         default:
             return state;
     }

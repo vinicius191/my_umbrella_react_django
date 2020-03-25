@@ -21,6 +21,10 @@ export const showWind = (wind) => {
 
 export const showRain = (rain) => {
     if(typeof rain != 'undefined') {
+        if(rain.hasOwnProperty('1h')) {
+            return rain['1h'];
+        }
+        
         return rain;
     }
 

@@ -69,6 +69,14 @@ export class WeatherDisplay extends Component {
         }
 
         console.log('AFTER', this.props.weather.favourite);
+    };
+
+    favsClick = (e) => {
+        e.preventDefault();
+
+        if(this.props.isAuthenticated) {
+            this.props.history.push('/favourites');
+        }
     }
 
     render() {
@@ -108,7 +116,7 @@ export class WeatherDisplay extends Component {
                                 {
                                     this.props.favs && this.props.favs.length > 0 
                                     ? 
-                                        <button type="button" className="btn btn-primary fav-cnt-btn pull-right">Favourites {this.props.favs.length}</button>
+                                        <button type="button" className="btn btn-primary fav-cnt-btn pull-right" onClick={this.favsClick}>Favourites {this.props.favs.length}</button>
                                     : 
                                         <></>
                                 }
@@ -245,7 +253,7 @@ export class WeatherDisplay extends Component {
                                     {
                                         this.props.favs && this.props.favs.length > 0 
                                         ? 
-                                            <button type="button" className="btn btn-primary fav-cnt-btn pull-right">Favourites {this.props.favs.length}</button>
+                                            <button type="button" className="btn btn-primary fav-cnt-btn pull-right" onClick={this.favsClick}>Favourites {this.props.favs.length}</button>
                                         : 
                                             <></>
                                     }

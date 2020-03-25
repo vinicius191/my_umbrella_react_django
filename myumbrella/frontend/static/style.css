@@ -14,6 +14,10 @@ body {
     margin-top: -230px;
 }
 
+.forecast-fav-main {
+    margin-top: -310px;
+}
+
 .forecast-container {
     background: #323544;
     color: #FFFFFF;
@@ -371,7 +375,7 @@ a {
 }
 
 .logged-menu-item {
-    padding: 5px 25px;
+    padding: 0px 25px;
 }
 
 .fav-cnt-btn {
@@ -379,4 +383,8 @@ a {
     background: #009ad8;
     border-radius: 0px;
     color: white;
+}
+
+.row-fav {
+    margin-top: 10px !important;
 }

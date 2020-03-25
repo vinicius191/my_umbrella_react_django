@@ -25,7 +25,7 @@ export class Logout extends Component {
 }
 
 const mapStateToProps = state => {
-
+    return {}
 };
 
 export default connect(mapStateToProps, {authLogout})(Logout);

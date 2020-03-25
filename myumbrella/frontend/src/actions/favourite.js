@@ -219,3 +219,36 @@ export const favActionCheck = (_token) => {
         });
     }
 }
+
+export const getWeatherFav = (_token) => {
+    return dispatch => {
+        dispatch({
+            type: 'WEATHER_FAV_STARTED'
+        });
+        axios.defaults.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${_token}`,
+            'X-CSRFToken' : Utils.getCsrfToken()
+        };
+        axios.get('api/weather/favourite')
+        .then(res => {
+            dispatch({
+                type: 'WEATHER_FAV_SUCCESS',
+                payload: res.data
+            });
+        })
+        .catch(err => {
+            if(err.resonse) {
+                dispatch({
+                    type: 'WEATHER_FAV_FAIL',
+                    error: err.resonse.statusText
+                });
+            } else {
+                dispatch({
+                    type: 'WEATHER_FAV_FAIL',
+                    error: 'Error to get weather for user\'s favourites'
+                });
+            }
+        });
+    }
+}
