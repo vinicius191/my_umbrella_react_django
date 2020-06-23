@@ -45,14 +45,18 @@ export const authLogin = (username, password) => {
             localStorage.setItem('token', token);
             localStorage.setItem('expirationTime', expirationTime);
             localStorage.setItem('username', res.data.user.username);
-            console.log('TOKEN', token)
+            //console.log('TOKEN', token)
             //dispatch(favCheck(token));
             dispatch(authSuccess(token, res.data.user.username));
             dispatch(checkAuthTimeOut(3600));
         })
         .catch(err => {
             if(err.response) {
-                dispatch(authFail(err.response.statusText))
+                if(err.response.data["non_field_errors"] !== undefined) {
+                    dispatch(authFail(err.response.data.non_field_errors[0]))
+                } else {
+                    dispatch(authFail(err.response.statusText))
+                }
             } else {
                 dispatch(authFail('Error to authenticate user.'))
             }
